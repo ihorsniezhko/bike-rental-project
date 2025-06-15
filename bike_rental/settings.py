@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import sys
 import dj_database_url
+# Checks if an env.py file exists and import it.
 if os.path.isfile('env.py'):
     import env
 
@@ -54,12 +55,16 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     # Local App for general project files
     'core',
+    'bikes',
+    'rentals',
+    'reviews',
+    'profiles',
 ]
 
-# For django.contrib.sites
+# Required by django-allauth
 SITE_ID = 1
 
-# For crispy_forms
+# For crispy_forms Bootstrap 5 styling
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
@@ -81,7 +86,7 @@ ROOT_URLCONF = 'bike_rental.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # Update 'DIRS' key
+        # Update 'DIRS' key, look for templates in a 'templates' folder
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -147,12 +152,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
- STATIC_URL = '/static/'
- STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
- STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
- STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# URL where static files will be served from.
+STATIC_URL = '/static/'
+# Serving static files in production.
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Where look for static files.
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+# Gather static files for deployment.
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Cloudinary for media files
+# Use Cloudinary for media files
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
