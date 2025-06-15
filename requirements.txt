@@ -1,0 +1,10 @@
+Django~=4.2.20
+psycopg2-binary
+gunicorn
+dj-database-url
+dj3-cloudinary-storage
+whitenoise
+django-allauth
+django-crispy-forms
+crispy-bootstrap5
+django-summernote
