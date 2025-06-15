@@ -9,6 +9,6 @@ assignees: ''
 
 As a **role**, I want **capability** so that **received benefit**.
 
-**Acceptance Criteria:**
+###Acceptance Criteria:
 
-**Tasks:**
+###Tasks:
