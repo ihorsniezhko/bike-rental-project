@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    {% if user.first_name and user.last_name %}
+    <h2 class="display-5">Welcome, {{ user.first_name }} {{ user.last_name }}!</h2>
+    <p class="text-muted">@{{ user.username }}</p>
+    {% else %}
+        <h2 class="display-5">Welcome, {{ user.username }}!</h2>
+    {% endif %}
+    <hr>
+    <h4>Active Rentals</h4>
+    {% if active_rentals %}
+        {% for rental in active_rentals %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ rental.bike.name }}</h5>
+                <p class="card-text">Rented on: {{ rental.start_time }}</p>
+                <a href="{% url 'return_bike' rental.id %}" class="btn btn-warning">Return Bike</a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>You have no active rentals.</p>
+    {% endif %}
+
+    <h4 class="mt-5">Rental History</h4>
+    {% for rental in past_rentals %}
+    <div class="card mb-2">
+         <div class="card-body">
+            <h5 class="card-title">{{ rental.bike.name }}</h5>
+            <p class="card-text">Returned on: {{ rental.end_time }} - Total: ${{ rental.total_cost }}</p>
+        </div>
+    </div>
+    {% empty %}
+        <p>You have no past rentals.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -22,6 +22,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Includes all necessary authentication URLs.
     path("accounts/", include("allauth.urls")),
-    # Django should look a match in bikes/urls.py file.
+    # Include bikes URLs.
     path('', include('bikes.urls')),
+    # Include Profile URLs
+    path('profile/', include('profiles.urls')),
+    # Include Rentals URLs
+    path('rental/', include('rentals.urls')),
 ]

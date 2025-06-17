@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <img src="{{ bike.featured_image.url }}" class="img-fluid" alt="{{ bike.name }}">
+        </div>
+        <div class="col-md-4">
+            <h2>{{ bike.name }}</h2>
+            <p>
+                Type: {{ bike.type }} <br>
+                Size: {{ bike.size }} <br>
+                Price: <strong>${{ bike.price_per_hour }}</strong> per hour
+            </p>
+
+            {% if user.is_authenticated %}
+                {% if bike.is_available %}
+                    <a href="{% url 'create_rental' bike.id %}" class="btn btn-success">Rent Now</a>
+                {% else %}
+                    <button class="btn btn-secondary" disabled>Currently Unavailable</button>
+                {% endif %}
+            {% else %}
+                <p><a href="{% url 'account_login' %}?next={{ request.path }}">Login</a> to rent this bike.</p>
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <h3>Reviews</h3>
+    <p>Reviews will appear here.</p>
+</div>
+{% endblock %}
