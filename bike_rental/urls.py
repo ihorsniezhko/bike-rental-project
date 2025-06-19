@@ -30,4 +30,6 @@ urlpatterns = [
     path('rental/', include('rentals.urls')),
     # Include Summernote URLs
     path('summernote/', include('django_summernote.urls')),
+    # Include Reviews URLs
+    path('reviews/', include('reviews.urls')),
 ]

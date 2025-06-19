@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card p-4 mt-4">
+                <h2 class="card-title text-center">Confirm Deletion</h2>
+                <div class="card-body text-center">
+                    <p>Are you sure you want to delete your review?</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Yes, Delete It</button>
+                        <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

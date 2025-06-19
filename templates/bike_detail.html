@@ -44,6 +44,13 @@
                   {% endif %}
                   on {{ review.created_at|date:"F d, Y" }}
                 </footer>
+                <!-- Links to edit and delete review URL -->
+                {% if request.user == review.user %}
+                    <div>
+                        <a href="{% url 'edit_review' review.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <a href="{% url 'delete_review' review.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </div>
+                    {% endif %}
                 </div>
         </div>
         {% empty %}

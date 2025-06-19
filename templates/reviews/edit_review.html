@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card p-4 mt-4">
+                <h2 class="card-title text-center">Edit Your Review</h2>
+                <div class="card-body">
+                    <form method="post" novalidate>
+                        <!-- required for the Summernote editor to work -->
+                        {{ form.media }}
+                        {% csrf_token %}
+                        <!-- crispy filter styles form with Bootstrap -->
+                        {{ form | crispy }}
+                        <button type="submit" class="btn btn-primary mt-3">Update Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
