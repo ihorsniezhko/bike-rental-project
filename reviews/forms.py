@@ -13,8 +13,10 @@ class ReviewForm(forms.ModelForm):
         model = Review
         # User set only rating and comment.
         fields = ['rating', 'comment']
-        # Customize how fields are rendered in HTML.
+        # Customize how fields are rendered.
         widgets = {
-            'comment': SummernoteWidget(), # Use the rich text editor.
-            'rating': forms.NumberInput(attrs={'min': 1, 'max': 5}), # Use an HTML5 for the rating.
+            # Use the rich text editor.
+            'comment': SummernoteWidget(),
+            # Use an HTML5 for the rating.
+            'rating': forms.NumberInput(attrs={'min': 1, 'max': 5}),
         }

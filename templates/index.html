@@ -14,7 +14,7 @@
                         <strong>Rating: {{ bike.average_rating|floatformat:1 }}/5.0</strong> <br>
                         Type: {{ bike.type }} <br>
                         Size: {{ bike.size }} <br>
-                        <strong>${{ bike.price_per_hour }}/hour</strong>
+                        <strong>€{{ bike.price_per_hour }}/hour</strong>
                     </p>
                     <a href="{% url 'bike_detail' bike.id %}" class="btn btn-primary mt-auto">View Details</a>
                 </div>

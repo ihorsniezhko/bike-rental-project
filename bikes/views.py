@@ -51,3 +51,39 @@ class BikeDetail(View):
                 "review_form": review_form,
             },
         )
+    # Decorator ensures only logged-in users can post reviews.
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        bike = get_object_or_404(Bike, pk=pk)
+
+        # Create form with POST data from the request.
+        review_form = ReviewForm(data=request.POST)
+
+        # Built-in form validation.
+        if review_form.is_valid():
+            # Set user for the review before saving.
+            review_form.instance.user = request.user
+            # Only create the review object.
+            review = review_form.save(commit=False)
+            # Associate the review with the correct bike.
+            review.bike = bike
+            # Save created review object to the database.
+            review.save()
+            messages.success(request, "Review submitted successfully!")
+            # Redirect to bike detail page to see the review.
+            return redirect('bike_detail', pk=bike.pk)
+        else:
+            # If the form contains error, re-render the page and display crispy-forms error message.
+            reviews = bike.reviews.all()
+            messages.error(request, "There was an error with your submission.")
+            return render(
+                request,
+                "bike_detail.html",
+                {
+                    "bike": bike,
+                    "reviews": reviews,
+                    # Pass form with errors
+                    "review_form": review_form,
+                },
+            )
