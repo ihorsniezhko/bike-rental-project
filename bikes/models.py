@@ -8,6 +8,8 @@ class Bike(models.Model):
     name = models.CharField(max_length=100)
     # Text field for the bike's type.
     type = models.CharField(max_length=50)
+    # Text field for the bike description (can be blank).
+    description = models.TextField(blank=True)
     # Text field for the bike's size.
     size = models.CharField(max_length=10)
     # Boolean field to check if the bike is currently available.

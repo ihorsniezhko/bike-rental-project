@@ -187,3 +187,12 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 # Points to custom form class.
 ACCOUNT_SIGNUP_FORM_CLASS = 'profiles.forms.CustomSignupForm'
+
+# Accept dd/mm/yyyy date format.
+DATE_INPUT_FORMATS = ['%d/%m/%Y']
+
+# Change date and time to European date format
+USE_L10N = False
+DATE_FORMAT = 'd/m/Y'
+TIME_FORMAT = 'H:i'
+DATETIME_FORMAT = 'd/m/Y H:i'

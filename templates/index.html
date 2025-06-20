@@ -2,12 +2,21 @@
 
 {% block content %}
 <div class="container">
-    <h2 class="text-center my-4">Available Bikes</h2>
+    <h2 class="text-center my-4 text-primary-emphasis">Available Bikes</h2>
+    <div class="text-center mb-4">
+        <p class="lead">
+            Welcome to our bike rental service! Whether you're looking to explore the city streets or hit the mountain trails, we have the perfect bike for your next adventure. Browse our selection below and get ready to ride!
+        </p>
+    </div>
     <div class="row">
+        <!-- Loop through the 'bike_list' that BikeList view passed to the template. -->
         {% for bike in bike_list %}
         <div class="col-md-4 mb-4">
             <div class="card h-100">
-                <img src="{{ bike.featured_image.url }}" class="card-img-top" alt="{{ bike.name }}">
+                <!-- Make the bike images clickable ('bike_detail' URL) -->
+                <a href="{% url 'bike_detail' bike.id %}">
+                    <img src="{{ bike.featured_image.url }}" class="card-img-top" alt="{{ bike.name }}">
+                </a>
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ bike.name }}</h5>
                     <p class="card-text">

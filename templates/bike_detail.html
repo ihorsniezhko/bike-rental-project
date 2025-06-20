@@ -8,13 +8,19 @@
             <img src="{{ bike.featured_image.url }}" class="img-fluid" alt="{{ bike.name }}">
         </div>
         <div class="col-md-4">
-            <h2>{{ bike.name }}</h2>
+            <h2 class="text-primary-emphasis">{{ bike.name }}</h2>
             <p>
                 Type: {{ bike.type }} <br>
                 Size: {{ bike.size }} <br>
                 Price: <strong>€{{ bike.price_per_hour }}</strong> per hour
             </p>
+            <hr>
+            <h3 class="text-primary-emphasis">Description</h3>
+            <!-- Use 'safe' filter to render HTML from the Summernote -->
+            <p>{{ bike.description | safe }}</p>
+            <hr>
 
+            <!-- Rent button logic -->
             {% if user.is_authenticated %}
                 {% if bike.is_available %}
                     <a href="{% url 'create_rental' bike.id %}" class="btn btn-success">Rent Now</a>
@@ -29,7 +35,7 @@
 <hr>
 <div class="row">
     <div class="col-md-8">
-        <h3>Reviews ({{ reviews.count }})</h3>
+        <h3 class="text-primary-emphasis">Reviews ({{ reviews.count }})</h3>
         {% for review in reviews %}
         <div class="card mb-3">
             <div class="card-body">
@@ -59,7 +65,7 @@
     </div>
     <div class="col-md-4">
         {% if user.is_authenticated %}
-            <h3>Leave a Review</h3>
+            <h3 class="text-primary-emphasis">Leave a Review</h3>
             <form method="post" novalidate>
                 {{ review_form.media }}
                 {% csrf_token %}

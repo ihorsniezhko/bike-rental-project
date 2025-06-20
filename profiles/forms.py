@@ -11,8 +11,8 @@ class CustomSignupForm(forms.Form):
     
     # Add custom field.
     date_of_birth = forms.DateField(
-        # Widget to render custom mandatory field, date picker in browsers.
-        widget=forms.DateInput(attrs={'type': 'date'}),
+        # Widget to render custom mandatory field, placeholder tells which format to use.
+        widget=forms.DateInput(attrs={'type': 'text', 'placeholder': 'dd/mm/yyyy'}),
         label="Date of Birth", required=True)
 
     # Special Django method to run custom validation for specific field.
