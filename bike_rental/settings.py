@@ -29,9 +29,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
+# HEROKU_HOSTNAME variable is set in the Heroku dashboard.
+HEROKU_HOSTNAME = os.environ.get('HEROKU_HOSTNAME')
+if HEROKU_HOSTNAME:
+    ALLOWED_HOSTS.append(HEROKU_HOSTNAME)
+
+# Local development host
+if not os.environ.get('DATABASE_URL'):
+    ALLOWED_HOSTS.append('127.0.0.1')
 
 
 # Application definition
@@ -76,8 +84,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # Add the allauth middleware
+    # Add allauth middleware
     'allauth.account.middleware.AccountMiddleware',
+    # Add whitenoise middleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 
 ]
 
