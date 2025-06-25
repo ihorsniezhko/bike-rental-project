@@ -7,11 +7,25 @@ from django.utils import timezone
 from .models import Rental
 from bikes.models import Bike
 
+
 @login_required
 def create_rental(request, bike_id):
+    """
+    Creates a new rental for a bike.
+
+    **Args:**
+    - `request`: The HTTP request object.
+    - `bike_id`: The ID of the bike to be rented.
+
+    **Returns:**
+    - A redirect to the user's profile page.
+    """
     bike = get_object_or_404(Bike, id=bike_id)
     # User cannot rent more than one bike at a time.
-    if Rental.objects.filter(user=request.user, end_time__isnull=True).exists():
+    has_active_rental = Rental.objects.filter(
+        user=request.user, end_time__isnull=True
+    ).exists()
+    if has_active_rental:
         messages.error(request, "You already have an active rental.")
         return redirect('profile')
     # Check to ensure the bike is still available.
@@ -29,8 +43,19 @@ def create_rental(request, bike_id):
         messages.error(request, "Sorry, this bike is no longer available.")
         return redirect('home')
 
+
 @login_required
 def return_bike(request, rental_id):
+    """
+    Handles the return of a rented bike.
+
+    **Args:**
+    - `request`: The HTTP request object.
+    - `rental_id`: The ID of the rental being completed.
+
+    **Returns:**
+    - A redirect to the user's profile page.
+    """
     # Get the specific rental object, ensuring it belongs to the current user.
     rental = get_object_or_404(Rental, id=rental_id, user=request.user)
     # Check if the rental is still active.
@@ -49,7 +74,11 @@ def return_bike(request, rental_id):
         rental.bike.save()
         # Save the changes to rental object.
         rental.save()
-        messages.success(request, f"Thank you for returning {rental.bike.name}. Total cost: ${cost}.")
+        success_message = (
+            f"Thank you for returning {rental.bike.name}. "
+            f"Total cost: ${cost}."
+        )
+        messages.success(request, success_message)
     else:
         messages.error(request, "This rental has already been completed.")
     return redirect('profile')

@@ -7,4 +7,4 @@ class ProfilesConfig(AppConfig):
 
     # Recommended 'ready' method to import signals.
     def ready(self):
-        import profiles.signals
+        import profiles.signals  # noqa: F401
