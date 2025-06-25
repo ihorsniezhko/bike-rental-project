@@ -34,7 +34,7 @@ class CustomSignupForm(forms.Form):
             ),
         label="Date of Birth",
         help_text="Please use the format DD/MM/YYYY.",
-        required=True),
+        required=True)
 
     # Special Django method to run custom validation for specific field.
     def clean_date_of_birth(self):
