@@ -2,7 +2,6 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container">
     <div class="row">
         <div class="col-md-8">
             <img src="{{ bike.featured_image.url }}" class="img-fluid" alt="{{ bike.name }}">
@@ -40,7 +39,7 @@
         <div class="card mb-3">
             <div class="card-body">
                 <p class="card-text"><strong>Rating: {{ review.rating }}/5</strong></p>
-                <p class="card-text">{{ review.comment | safe }}</p>
+                <div class="card-text">{{ review.comment | safe }}</div>
 
                 <footer class="blockquote-footer">
                   {% if review.user.first_name and review.user.last_name %}
