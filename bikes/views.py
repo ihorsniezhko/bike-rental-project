@@ -159,16 +159,32 @@ class BikeDetail(View):
             # Redirect to bike detail page to see the review.
             return redirect('bike_detail', pk=bike.pk)
         else:
-            # If form contains error, re-render page and display error message.
+            # If the form is invalid, create a specific error message.
+            error_list = []
+            if 'rating' in review_form.errors:
+                error_list.append("a rating")
+            if 'comment' in review_form.errors:
+                error_list.append("a comment")
+            # Construct the final message with missing fields.
+            if error_list:
+                error_text = " and ".join(error_list)
+                messages.error(
+                    request, f"Please provide {error_text} for your review."
+                    )
+            else:
+                # Fallback for other unexpected errors.
+                messages.error(request,
+                               "There was an error with your submission. "
+                               "Please check the form for details."
+                               )
             reviews = bike.reviews.all()
-            messages.error(request, "There was an error with your submission.")
             return render(
                 request,
                 "bike_detail.html",
                 {
                     "bike": bike,
                     "reviews": reviews,
-                    # Pass form with errors
+                    # Pass the form with errors back to the template
                     "review_form": review_form,
                 },
             )

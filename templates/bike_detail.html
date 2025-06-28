@@ -2,10 +2,13 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+    <!-- Main row for bike image and details -->
     <div class="row">
+        <!-- Column for the bike's image -->
         <div class="col-md-8">
             <img src="{{ bike.featured_image.url }}" class="img-fluid" alt="{{ bike.name }}">
         </div>
+        <!-- Column for bike information and actions -->
         <div class="col-md-4">
             <h2 class="text-primary-emphasis">{{ bike.name }}</h2>
             <p>
@@ -15,33 +18,54 @@
             </p>
             <hr>
             <h3 class="text-primary-emphasis">Description</h3>
-            <!-- Use 'safe' filter to render HTML from the Summernote -->
+            <!-- The 'safe' filter is used to render the HTML content from the rich-text editor (Summernote) correctly. -->
             <div>{{ bike.description | safe }}</div>
             <hr>
 
-            <!-- Rent button logic -->
+            <!-- Rent button logic: Displayed based on user authentication and bike availability. -->
             {% if user.is_authenticated %}
                 {% if bike.is_available %}
+                    <!-- If the user is logged in and the bike is available, show the 'Rent Now' button. -->
                     <a href="{% url 'create_rental' bike.id %}" class="btn btn-success">Rent Now</a>
                 {% else %}
+                    <!-- If the bike is not available, show a disabled button. -->
                     <button class="btn btn-secondary" disabled>Currently Unavailable</button>
                 {% endif %}
             {% else %}
+                <!-- If the user is not logged in, prompt them to log in. -->
                 <p><a href="{% url 'account_login' %}?next={{ request.path }}">Login</a> to rent this bike.</p>
             {% endif %}
         </div>
     </div>
 <hr>
+<!-- Row for reviews and the review submission form -->
 <div class="row">
+    <!-- Column for displaying existing reviews. -->
     <div class="col-md-8">
+        <!-- Display the total number of reviews. -->
         <h3 class="text-primary-emphasis">Reviews ({{ reviews.count }})</h3>
+        <!-- Loop through each review associated with the bike. -->
         {% for review in reviews %}
         <div class="card mb-3">
             <div class="card-body">
-                <p class="card-text"><strong>Rating: {{ review.rating }}/5</strong></p>
+                <!-- Star display for existing reviews -->
+                <!-- This loop displays the rating visually using Font Awesome stars -->
+                <div class="review-rating mb-2">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}
+                            <!-- A solid star for each point in the rating. -->
+                            <i class="fas fa-star"></i>
+                        {% else %}
+                            <!-- An empty star for the remainder up to 5. -->
+                            <i class="far fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <!-- Use the 'safe' filter for the comment as it may contain HTML from the rich-text editor. -->
                 <div class="card-text">{{ review.comment | safe }}</div>
 
-                <footer class="blockquote-footer">
+                <footer class="blockquote-footer mt-2">
+                  <!-- Display the user's full name if available, otherwise their username. -->
                   {% if review.user.first_name and review.user.last_name %}
                     By {{ review.user.first_name }} {{ review.user.last_name }}
                   {% else %}
@@ -49,26 +73,54 @@
                   {% endif %}
                   on {{ review.created_at|date:"F d, Y" }}
                 </footer>
-                <!-- Links to edit and delete review URL -->
+                <!-- Edit and Delete buttons are only shown if the logged-in user is the author of the review. -->
                 {% if request.user == review.user %}
-                    <div>
+                    <div class="mt-2">
                         <a href="{% url 'edit_review' review.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                        <a href="{% url 'delete_review' review.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
-                        </div>
-                    {% endif %}
-                </div>
+                        <!-- Form sends a POST request to the delete view. -->
+                        <form action="{% url 'delete_review' review.id %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
         </div>
         {% empty %}
+            <!-- This message is shown if there are no reviews for the bike. -->
             <p>No reviews yet. Be the first to leave one!</p>
         {% endfor %}
     </div>
+    <!-- Column for the review submission form -->
     <div class="col-md-4">
+        <!-- The form is only displayed to authenticated users. -->
         {% if user.is_authenticated %}
             <h3 class="text-primary-emphasis">Leave a Review</h3>
+            <!-- The form for submitting a new review. -->
             <form method="post" novalidate>
-                {{ review_form.media }}
+                <!-- CSRF token for security. -->
                 {% csrf_token %}
-                {{ review_form | crispy }}
+                
+                <!-- Replace standard number input for 'rating' with an interactive star system. -->
+                <div class="mb-3">
+                    <label class="form-label">Rating:</label>
+                    <div class="star-rating" id="rating-stars">
+                        <!-- The actual form input for the rating is hidden. JavaScript will populate value. -->
+                        {{ review_form.rating.as_hidden }}
+                        <!-- Visible, clickable Font Awesome star icons. -->
+                        <!-- 'data-value' attribute holds the rating that will be sent. -->
+                        <i class="fas fa-star star" data-value="1"></i>
+                        <i class="fas fa-star star" data-value="2"></i>
+                        <i class="fas fa-star star" data-value="3"></i>
+                        <i class="fas fa-star star" data-value="4"></i>
+                        <i class="fas fa-star star" data-value="5"></i>
+                    </div>
+                </div>
+
+                <!-- Comment field, including its media files for the rich-text editor. -->
+                {{ review_form.comment.media }}
+                {{ review_form.comment|as_crispy_field }}
+                
                 <button type="submit" class="btn btn-primary mt-2">Submit Review</button>
             </form>
         {% endif %}

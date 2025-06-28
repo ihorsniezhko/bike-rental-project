@@ -1,0 +1,23 @@
+/* Apply Roboto Serif as the default font for the entire website */
+body {
+    font-family: 'Roboto Serif', serif;
+}
+
+/* Styling for the interactive star rating system on the review form */
+.star-rating .star {
+    font-size: 1.5rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+/* Style for a selected star or a star being hovered over */
+.star-rating .star.selected,
+.star-rating .star:hover {
+    color: #ffc107; /* Bootstrap's warning yellow */
+}
+
+/* Styling for displaying existing ratings (read-only stars) */
+.review-rating .fa-star {
+    color: #ffc107;
+}

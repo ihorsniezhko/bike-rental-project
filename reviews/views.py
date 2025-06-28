@@ -1,5 +1,5 @@
 # Generic views
-from django.views import generic
+from django.views import generic, View
 # Handling URL reversals and user authentication
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import (
@@ -9,6 +9,7 @@ from django.contrib import messages
 # Import Review model and ReviewForm
 from .models import Review
 from .forms import ReviewForm
+from django.shortcuts import get_object_or_404, redirect
 
 
 class EditReview(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -17,9 +18,9 @@ class EditReview(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
 
     **Mixins:**
     - `LoginRequiredMixin`: Ensures that only authenticated users
-    can access this view.
+      can access this view.
     - `UserPassesTestMixin`: Ensures that the user editing the review
-    is the author of the review.
+      is the author of the review.
 
     **Template:**
     - `reviews/edit_review.html`
@@ -37,7 +38,9 @@ class EditReview(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
         **Returns:**
         - `True` if the user is the author, `False` otherwise.
         """
+        # Get the review object that is being edited.
         review = self.get_object()
+        # Check if the logged-in user is the same as the user who did review.
         return self.request.user == review.user
 
     def get_success_url(self):
@@ -47,57 +50,59 @@ class EditReview(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
         **Returns:**
         - The URL of the bike's detail page.
         """
-        # Bike associated with review.
+        # Get the bike associated with the review that was just updated.
         bike = self.object.bike
-        # Success message.
+        # Create a success message to be displayed on the next page.
         messages.success(
             self.request, 'Your review has been updated successfully.'
             )
-        # Return the URL for bike's detail page.
+        # Return the URL for the associated bike's detail page.
         return reverse_lazy('bike_detail', kwargs={'pk': bike.pk})
 
 
-class DeleteReview(
-        LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, View):
     """
-    Allows a logged-in user to delete their own review.
+    Handles the deletion of a review via a POST request,
+    without confirmation.
 
     **Mixins:**
-    - `LoginRequiredMixin`: Ensures that only authenticated users
-    can access this view.
-    - `UserPassesTestMixin`: Ensures that the user deleting the review
-    is the author of the review.
-
-    **Template:**
-    - `reviews/review_confirm_delete.html`
+    - `LoginRequiredMixin`: Ensures that only authenticated users can
+      perform this action.
+    - `UserPassesTestMixin`: Ensures that only the author of the review
+      can delete it.
     """
-    model = Review
-    template_name = "reviews/review_confirm_delete.html"
-    # Redirect user back to the homepage after delete.
-    success_url = reverse_lazy('home')
+    def post(self, request, *args, **kwargs):
+        """
+        Handles the POST request to delete a review.
+
+        **Args:**
+        - `request`: The HTTP request object. `*args`, `**kwargs`: Additional
+        arguments, including the review's primary key (`pk`).
+        **Returns:** An `HttpResponseRedirect` to the bike's
+        detail page.
+        """
+        # Retrieve the specific review to be deleted.
+        review = get_object_or_404(
+            Review, pk=kwargs['pk'], user=request.user
+            )
+        # Store the primary key of bike before deleting the review.
+        bike_pk = review.bike.pk
+        # Delete review object from the database.
+        review.delete()
+        # Create a success message for the user.
+        messages.success(request, 'Your review has been successfully deleted.')
+        # Redirect the user back to the bike detail page.
+        return redirect('bike_detail', pk=bike_pk)
 
     def test_func(self):
         """
-        Checks if the current user is the author of the review.
+        Checks if the current user is the author of the review before
+        allowing the POST request.
 
         **Returns:**
         - `True` if the user is the author, `False` otherwise.
         """
-        review = self.get_object()
+        # Get the review object based on primary key from the URL.
+        review = get_object_or_404(Review, pk=self.kwargs['pk'])
+        # Verify that logged-in user is the review author.
         return self.request.user == review.user
-
-    def delete(self, request, *args, **kwargs):
-        """
-        Handles the deletion of the review and adds a success message.
-
-        **Args:**
-        - `request`: The HTTP request object.
-        - `*args`, `**kwargs`: Additional arguments.
-
-        **Returns:**
-        - An `HttpResponseRedirect` to the `success_url`.
-        """
-        messages.success(
-            self.request, 'Your review has been deleted successfully.'
-            )
-        return super().delete(request, *args, **kwargs)
