@@ -30,14 +30,22 @@ def create_rental(request, bike_id):
         return redirect('profile')
     # Check to ensure the bike is still available.
     if bike.is_available:
-        # Create the new rental record.
-        Rental.objects.create(user=request.user, bike=bike)
-        # Update the bike's status to unavailable.
+        # Create the new rental record and capture it to use its properties.
+        new_rental = Rental.objects.create(user=request.user, bike=bike)
+        # Update bike status to unavailable.
         bike.is_available = False
         bike.save()
+        # Format the start time for a user-friendly message.
+        start_time_formatted = new_rental.start_time.strftime("%H:%M on %B %d")
+        # Create a detailed success message.
+        success_message = (
+            f"You have successfully rented '{bike.name}'. "
+            f"Your ride started at {start_time_formatted}. Enjoy!"
+        )
+
         # Success message displayed.
-        messages.success(request, f"You have successfully rented {bike.name}.")
-        # Redirect to user's profile page.
+        messages.success(request, success_message)
+        # Redirect to user profile page.
         return redirect('profile')
     else:
         messages.error(request, "Sorry, this bike is no longer available.")
@@ -74,9 +82,10 @@ def return_bike(request, rental_id):
         rental.bike.save()
         # Save the changes to rental object.
         rental.save()
+        # The confirmation message.
         success_message = (
             f"Thank you for returning {rental.bike.name}. "
-            f"Total cost: ${cost}."
+            f"Total cost: €{cost:.2f}."
         )
         messages.success(request, success_message)
     else:
