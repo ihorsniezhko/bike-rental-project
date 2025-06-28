@@ -8,6 +8,31 @@
             Welcome to our bike rental service! Whether you're looking to explore the city streets or hit the mountain trails, we have the perfect bike for your next adventure. Browse our selection below and get ready to ride!
         </p>
     </div>
+    <!-- Each option has a value that corresponds to the sorting logic in the backend view. -->
+    <!-- 'if' condition check the 'sort_by' parameter in the URL and add 'selected' attribute -->
+    <!-- to the currently active sorting option (user can see selection) -->
+    <div class="row mb-4 justify-content-end">
+        <div class="col-md-6 col-lg-4">
+            <form method="get" action="{% url 'home' %}">
+                <div class="input-group">
+                    <label class="input-group-text" for="sort-by-select">Sort by:</label>
+                    <select name="sort_by" id="sort-by-select" class="form-select" onchange="this.form.submit()">
+                        <option value="name_asc" {% if request.GET.sort_by == 'name_asc' or not request.GET.sort_by %}selected{% endif %}>Name (A-Z)</option>
+                        <option value="name_desc" {% if request.GET.sort_by == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
+                        <option value="type_asc" {% if request.GET.sort_by == 'type_asc' %}selected{% endif %}>Type (A-Z)</option>
+                        <option value="type_desc" {% if request.GET.sort_by == 'type_desc' %}selected{% endif %}>Type (Z-A)</option>
+                        <option value="size_asc" {% if request.GET.sort_by == 'size_asc' %}selected{% endif %}>Size (Ascending)</option>
+                        <option value="size_desc" {% if request.GET.sort_by == 'size_desc' %}selected{% endif %}>Size (Descending)</option>
+                        <option value="price_asc" {% if request.GET.sort_by == 'price_asc' %}selected{% endif %}>Price per hour (Low to High)</option>
+                        <option value="price_desc" {% if request.GET.sort_by == 'price_desc' %}selected{% endif %}>Price per hour (High to Low)</option>
+                        <option value="rating_desc" {% if request.GET.sort_by == 'rating_desc' %}selected{% endif %}>Rating (High to Low)</option>
+                        <option value="rating_asc" {% if request.GET.sort_by == 'rating_asc' %}selected{% endif %}>Rating (Low to High)</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <div class="row">
         <!-- Loop through the 'bike_list' that BikeList view passed to the template. -->
         {% for bike in bike_list %}

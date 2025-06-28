@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 # HEROKU_HOSTNAME variable is set in the Heroku dashboard.
@@ -214,3 +214,11 @@ USE_L10N = False
 DATE_FORMAT = 'd/m/Y'
 TIME_FORMAT = 'H:i'
 DATETIME_FORMAT = 'd/m/Y H:i'
+
+# Ensures the Summernote rich text editor is responsive.
+SUMMERNOTE_CONFIG = {
+    'summernote': {
+        'width': '100%',
+        'height': '480',
+    },
+}

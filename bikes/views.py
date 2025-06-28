@@ -4,6 +4,8 @@ from django.views import View, generic
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+# Import Avg to calculate the average rating at the database level.
+from django.db.models import Avg
 
 # Import models and forms.
 from .models import Bike
@@ -13,7 +15,7 @@ from reviews.forms import ReviewForm
 # View inherits Django ListView.
 class BikeList(generic.ListView):
     """
-    Displays a list of available bikes.
+    Displays a list of available bikes, with sorting options.
 
     **Context:**
     - `bike_list`: A queryset of `Bike` objects where `is_available` is True.
@@ -23,12 +25,56 @@ class BikeList(generic.ListView):
     """
     # Which model to use.
     model = Bike
-    # Only get available bikes (filtered set).
-    queryset = Bike.objects.filter(is_available=True).order_by('type')
     # Specify the view template file.
     template_name = 'index.html'
-    # Variable that hold the list of bikes in the template.
+    # Variable that holds the list of bikes in the template.
     context_object_name = 'bike_list'
+
+    def get_queryset(self):
+        """
+        Returns the list of available bikes,
+        optionally sorted by a user-selected parameter.
+        Optimized to perform sorting at the database level.
+        """
+        queryset = Bike.objects.filter(is_available=True)
+        # Get the sorting parameter from the URL, default 'name_asc'.
+        sort_by = self.request.GET.get('sort_by', 'name_asc')
+
+        # A dictionary to map the sort_by parameter to ordering field.
+        ordering_map = {
+            'name_asc': 'name',
+            'name_desc': '-name',
+            'type_asc': 'type',
+            'type_desc': '-type',
+            'price_asc': 'price_per_hour',
+            'price_desc': '-price_per_hour',
+            # Special handling for size and rating.
+        }
+
+        if sort_by in ordering_map:
+            queryset = queryset.order_by(ordering_map[sort_by])
+
+        # Handling for size (allow for custom or numeric sorting).
+        elif sort_by == 'size_asc':
+            queryset = queryset.order_by('size')
+        elif sort_by == 'size_desc':
+            queryset = queryset.order_by('-size')
+
+        # Handling for rating (annotate method to calculate average rating).
+        elif sort_by == 'rating_asc':
+            queryset = queryset.annotate(
+                avg_rating=Avg('reviews__rating')
+            ).order_by('avg_rating')
+        elif sort_by == 'rating_desc':
+            queryset = queryset.annotate(
+                avg_rating=Avg('reviews__rating')
+            ).order_by('-avg_rating')
+
+        # Default sort if invalid parameter
+        else:
+            queryset = queryset.order_by('name')
+
+        return queryset
 
 
 # Standard view to handle GET and POST requests (view page, submit review)
