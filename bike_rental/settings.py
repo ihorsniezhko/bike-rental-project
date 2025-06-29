@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+import sys
 
 # Checks if an env.py file exists and import it.
 if os.path.isfile('env.py'):
@@ -131,6 +132,14 @@ DATABASES = {
    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
 }
 
+# Use a faster in-memory SQLite database for tests if 'test' is in sys.argv
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        # ':memory:' tells SQLite to use an in-memory database
+        'NAME': ':memory:',
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -184,6 +193,13 @@ STATIC_URL = '/static/'
 STATICFILES_STORAGE = (
     'whitenoise.storage.CompressedManifestStaticFilesStorage'
 )
+
+# Override storage for tests to avoid needing to run collectstatic
+if 'test' in sys.argv:
+    STATICFILES_STORAGE = (
+        'django.contrib.staticfiles.storage.StaticFilesStorage'
+    )
+
 # Where look for static files.
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 # Gather static files for deployment.
