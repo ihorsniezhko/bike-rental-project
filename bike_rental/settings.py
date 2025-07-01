@@ -33,7 +33,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 # HEROKU_HOSTNAME variable is set in the Heroku dashboard.
@@ -87,8 +87,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # Add allauth middleware
+    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #  Add allauth middleware
     'allauth.account.middleware.AccountMiddleware',
     # Add whitenoise middleware
     'whitenoise.middleware.WhiteNoiseMiddleware',
