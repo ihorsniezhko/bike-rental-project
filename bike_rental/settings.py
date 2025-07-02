@@ -35,16 +35,13 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
-# HEROKU_HOSTNAME variable is set in the Heroku dashboard.
+# Start with local hosts allowed by default.
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+# Add the Heroku hostname if the environment variable exists.
 HEROKU_HOSTNAME = os.environ.get('HEROKU_HOSTNAME')
 if HEROKU_HOSTNAME:
     ALLOWED_HOSTS.append(HEROKU_HOSTNAME)
-
-# Local development host
-if not os.environ.get('DATABASE_URL'):
-    ALLOWED_HOSTS.append('127.0.0.1')
-
 
 # Application definition
 

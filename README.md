@@ -16,6 +16,25 @@ This is a Django-based web application for a bike rental service. This project a
 
 * **Review and Rating System**: Users can leave reviews and ratings for bikes they have rented. The average rating for each bike is displayed on the bike listing and detail pages.
 
+## Application Screenshots
+
+Below are some screenshots of the application in action.
+
+**Homepage**
+![Bike Rental Project Homepage](/static/media/homepage.png)
+
+**Bike Detail Page**
+![Bike Detail Page](/static/media/bike-detail.png)
+
+**User Sign Up Page**
+![User Sign Up](/static/media/user-signup.png)
+
+**User Profile**
+![User Profile](/static/media/user-profile.png)
+
+**Admin Interface**
+![Admin Interface](/static/media/admin-interface.png)
+
 ## ERD Diagram
 
 Here is the Entity-Relationship Diagram for the project, showing the relationships between the different models:
@@ -67,8 +86,57 @@ Here is the Entity-Relationship Diagram for the project, showing the relationshi
     BIKE ||--o{ RENTAL : "is rented in"
     BIKE ||--o{ REVIEW : "is reviewed in"
 ```
-
+![ERD diagram graphical representation](/static/media/erd-diagram.png)
 In the diagram, user information is split between the `USER` model (which contains `first_name` and `last_name`) and the associated `PROFILE` model (which contains `date_of_birth`). All of these fields are implemented during registration.
+
+## Testing
+
+### Manual Testing
+
+The following table outlines the manual tests conducted for this project.
+
+| **Feature** | **Test Case** | **Expected Outcome** | **Actual Outcome** | 
+|---|---|---|---|
+| User Authentication | Register a new user with valid information. | User is successfully registered and logged in. | ✅ | 
+| User Authentication | Register a new user with an existing username. | An error message is displayed, and registration fails. | ✅ | 
+| User Authentication | Register a new user younger than 14 years old. | An error message is displayed, and registration fails. | ✅ | 
+| User Authentication | Register a new user older than 90 years old. | An error message is displayed, and registration fails. | ✅ | 
+| User Authentication | Login with a valid username and password. | User is successfully logged in. | ✅ | 
+| User Authentication | Login with an invalid username or password. | An error message is displayed, and login fails. | ✅ | 
+| User Authentication | Logout from an authenticated session. | User is successfully logged out. | ✅ | 
+| Bike Rentals | Rent an available bike. | The bike is marked as unavailable, and the rental is added to the user's profile. | ✅ | 
+| Bike Rentals | Verify that unavailable/rented bikes do not appear on the main list. | Only bikes with `is_available=True` are displayed to the user. | ✅ | 
+| Bike Rentals | Attempt to rent a bike while having an active rental. | The user is notified that they already have an active rental. | ✅ | 
+| Bike Rentals | Return a rented bike. | The bike is marked as available, and the rental is moved to the user's rental history with a calculated cost. | ✅ | 
+| Reviews | Leave a review for a bike. | The review is added to the bike's detail page. | ✅ | 
+| Reviews | Edit an existing review. | The review is updated on the bike's detail page. | ✅ | 
+| Reviews | Delete an existing review. | The review is removed from the bike's detail page. | ✅ | 
+
+### Automated Testing
+
+Automated tests are implemented using Django's built-in testing framework and Jest for frontend JavaScript.
+
+* **Backend Tests**:
+  * `reviews/tests.py`: Contains tests for the `Review` model and the `DeleteReview` view. These tests ensure that reviews are created correctly, that ratings are validated, and that users can delete their own reviews.
+  * `rentals/tests.py`: Includes tests for the `create_rental` view. These tests verify that authenticated users can rent available bikes and that users with active rentals cannot rent another bike.
+
+* **Frontend Tests**:
+  * `static/js/star-rating.test.js`: Contains Jest tests for the star rating component on the review form. These tests ensure that the star rating functionality works as expected, including initialization, user interaction (clicking and hovering), and updating the hidden input value.
+
+### Code Validation
+
+#### Python Linter (Flake8)
+All Python code was checked for errors and adherence to the PEP 8 style guide using the **Flake8** linter in Visual Studio Code. No errors were reported.
+
+#### W3C Validators
+The HTML and CSS files were validated to ensure they meet the latest web standards.
+* **HTML:** All HTML pages were validated using the [W3C Markup Validation Service](https://validator.w3.org/).
+* **CSS:** The `style.css` file was validated using the [W3C CSS Validation Service](https://jigsaw.w3.org/css-validator/).
+
+## Application Loading Speed
+
+To ensure a good user experience, the application's loading speed was tested using the Chrome Lighthouse report.
+![Bike Rental Project Lighthouse Report](/static/media/lighthouse-report.png)
 
 ## Deployment
 
@@ -82,7 +150,7 @@ In the diagram, user information is split between the `USER` model (which contai
    ```
 
 2. **Create the Database:**
-   Navigate to the **Code Institute database** page to create your PostgreSQL database. You will receive the `DATABASE_URL` via email.
+   Navigate to the [Code Institute database page](https://dbs.ci-dbs.net/) to create your PostgreSQL database. You will receive the `DATABASE_URL` via email.
 
 3. **Set Up Environment Variables:**
    * Create a file named `env.py` in the root directory of the project.
@@ -171,7 +239,6 @@ In the diagram, user information is split between the `USER` model (which contai
      * `CLOUDINARY_URL`: Your Cloudinary URL.
      * `SECRET_KEY`: Your Django secret key.
      * `HEROKU_HOSTNAME`: The hostname of your deployed Heroku app (e.g., `your-app-name.herokuapp.com`).
-   * **Important:** Do **NOT** set `DISABLE_COLLECTSTATIC`. Let Heroku run the `collectstatic` command.
 
 7. **Deploy and Run Migrations:**
    * On the `Deploy` tab, trigger a `Manual deploy` of the `main` branch.
@@ -179,65 +246,15 @@ In the diagram, user information is split between the `USER` model (which contai
    ```bash
    heroku run python manage.py migrate --app your-app-name
    ```
-Your app should now be live and serving static files correctly, resolving the 500 error.
+Your app should now be live.
 
-## Testing 🧪
+## Future Features and Improvements
 
-### Manual Testing
-
-The following table outlines the manual tests conducted for this project.
-
-| **Feature** | **Test Case** | **Expected Outcome** | **Actual Outcome** | 
-|---|---|---|---|
-| User Authentication | Register a new user with valid information. | User is successfully registered and logged in. | ✅ | 
-| User Authentication | Register a new user with an existing username. | An error message is displayed, and registration fails. | ✅ | 
-| User Authentication | Register a new user younger than 14 years old. | An error message is displayed, and registration fails. | ✅ | 
-| User Authentication | Register a new user older than 90 years old. | An error message is displayed, and registration fails. | ✅ | 
-| User Authentication | Login with a valid username and password. | User is successfully logged in. | ✅ | 
-| User Authentication | Login with an invalid username or password. | An error message is displayed, and login fails. | ✅ | 
-| User Authentication | Logout from an authenticated session. | User is successfully logged out. | ✅ | 
-| Bike Rentals | Rent an available bike. | The bike is marked as unavailable, and the rental is added to the user's profile. | ✅ | 
-| Bike Rentals | Attempt to rent an unavailable bike. | The user is notified that the bike is unavailable. | ✅ | 
-| Bike Rentals | Attempt to rent a bike while having an active rental. | The user is notified that they already have an active rental. | ✅ | 
-| Bike Rentals | Return a rented bike. | The bike is marked as available, and the rental is moved to the user's rental history with a calculated cost. | ✅ | 
-| Reviews | Leave a review for a bike. | The review is added to the bike's detail page. | ✅ | 
-| Reviews | Edit an existing review. | The review is updated on the bike's detail page. | ✅ | 
-| Reviews | Delete an existing review. | The review is removed from the bike's detail page. | ✅ | 
-
-### Automated Testing
-
-Automated tests are implemented using Django's built-in testing framework and Jest for frontend JavaScript.
-
-* **Backend Tests**:
-  * `reviews/tests.py`: Contains tests for the `Review` model and the `DeleteReview` view. These tests ensure that reviews are created correctly, that ratings are validated, and that users can delete their own reviews.
-  * `rentals/tests.py`: Includes tests for the `create_rental` view. These tests verify that authenticated users can rent available bikes and that users with active rentals cannot rent another bike.
-
-* **Frontend Tests**:
-  * `static/js/star-rating.test.js`: Contains Jest tests for the star rating component on the review form. These tests ensure that the star rating functionality works as expected, including initialization, user interaction (clicking and hovering), and updating the hidden input value.
-
-### Code Validation
-
-#### Python Linter (Flake8)
-All Python code was checked for errors and adherence to the PEP 8 style guide using the **Flake8** linter in Visual Studio Code. No errors were reported.
-
-#### W3C Validators
-The HTML and CSS files were validated to ensure they meet the latest web standards.
-* **HTML:** All HTML pages were validated using the [W3C Markup Validation Service](https://validator.w3.org/).
-* **CSS:** The `style.css` file was validated using the [W3C CSS Validation Service](https://jigsaw.w3.org/css-validator/).
-
-## Application Screenshots
-
-Below are some screenshots of the application in action.
-
-**Homepage**
-
-**Bike Detail Page**
-
-**User Profile**
-
-## Application Loading Speed
-
-To ensure a good user experience, the application's loading speed was tested using the Chrome Lighthouse report.
+* **Payment Integration:** Integrate a payment gateway like Stripe or PayPal to handle rental payments directly through the website.
+* **Advanced Search and Filtering:** Implement a search bar to find bikes by name and add more advanced filtering options, such as filtering by availability on a specific date.
+* **User-to-User Messaging:** Create a simple messaging system to allow users to ask questions about a bike before renting.
+* **Admin Dashboard Enhancements:** Improve the admin panel with more detailed analytics, such as rental statistics, popular bikes, and user activity reports.
+* **Booking Calendar:** Instead of immediate rentals, allow users to book bikes for specific dates and times in the future using a calendar interface.
 
 ## Credits and Resources
 
