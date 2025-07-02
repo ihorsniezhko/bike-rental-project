@@ -16,6 +16,84 @@ This is a Django-based web application for a bike rental service. This project a
 
 * **Review and Rating System**: Users can leave reviews and ratings for bikes they have rented. The average rating for each bike is displayed on the bike listing and detail pages.
 
+## Project Management
+
+The development of this project was managed using a GitHub Projects board. The board was used to track user stories, tasks, and progress through a Kanban-style workflow.
+
+* [**View the Project Board on GitHub**](https://github.com/users/ihorsniezhko/projects/5)
+
+## User Stories
+
+The following user stories were used to guide the development of this project:
+
+### User Perspective
+* **As a new user,** I want to sign up for an account using my first name, last name, and date of birth, so that my profile is personalized and the service can verify my age eligibility.
+* **As a user,** I want to find an available bike, view its details, rent it for a period, and then return it through my personal profile so that I can easily use the rental service and track my activity.
+* **As a user who has rented a bike,** I want to leave a rating and a written review on the bike's detail page so that I can share my experience and help other users make informed decisions.
+
+### Administrator Perspective
+* **As a site administrator,** I want to be able to add, edit, and delete bikes from the inventory through the admin panel so that I can manage the products available for rent.
+* **As a site administrator,** I want to view and moderate user-submitted reviews so that I can maintain a safe and appropriate community environment.
+* **As a site administrator,** I want to view all user accounts and rental records so that I can oversee the platform's activity and assist users with issues.
+
+### Developer & Stakeholder Perspective
+* **As a developer,** I want to configure an automated deployment pipeline by connecting the project's GitHub repository to Heroku, so that I can deploy the application reliably.
+* **As a project stakeholder,** I want a comprehensive `README.md` file that clearly explains the project's purpose, features, and setup process, so that I can quickly understand and contribute to the application.
+* **As a site administrator,** I want to localize the site for a European audience and implement branding and initial content, so that the website feels professional and ready for testing.
+
+## Wireframes
+
+The wireframes for this project were created to establish a simple and clear structure for each page, focusing on user flow and element placement.
+
+* **Homepage Wireframe:**
+    * **Header:** Contains the logo, site name, and navigation links (Login/Signup or Profile/Logout).
+    * **Main Content:** A main heading "Available Bikes" is followed by an introductory paragraph. Below this, a grid of bike cards is displayed. Each card contains a placeholder for an image, the bike's name, key details (type, size, price), and a "View Details" button.
+    * **Footer:** A simple footer with basic site information.
+
+* **Bike Detail Page Wireframe:**
+    * **Header & Footer:** Consistent with the homepage.
+    * **Main Content:** A two-column layout. The left column is dedicated to a large image of the bike. The right column contains the bike's name, a list of its key details, the price, and a prominent "Rent Now" button. Below this, a section is reserved for the bike's detailed description.
+    * **Reviews Section:** Below the main content, another two-column layout displays existing user reviews on the left and a review submission form on the right for authenticated users.
+
+* **Login / Sign Up Page Wireframe:**
+    * **Header & Footer:** Consistent with the homepage.
+    * **Main Content:** A single, centered content block containing a form. The form has a clear heading ("Login" or "Sign Up") and placeholders for the required input fields (username, password, etc.). A primary submission button is at the bottom of the form.
+
+* **User Profile Page Wireframe:**
+    * **Header & Footer:** Consistent with the homepage.
+    * **Main Content:** A single-column layout with a welcome message for the user. The page is divided into two clear sections: "Active Rentals" and "Rental History". Each rental is displayed in its own card, with active rentals showing a "Return Bike" button.
+
+## Frontend Design and User Experience (UX)
+
+The frontend of this project was designed with a focus on simplicity, clarity, and responsiveness, primarily using the **Bootstrap 5** framework. The goal was to create a clean and intuitive user interface without the need for complex custom styling, which is a common approach for a project where the backend logic is the main focus.
+
+* **Overall Structure:**
+    * A consistent **Header** and **Footer** are used across all pages, which are defined in the `base.html` template. This ensures a predictable navigation experience for the user.
+    * The main content of each page is wrapped in a Bootstrap `container`, which provides appropriate padding and centers the content on larger screens.
+
+* **Header:**
+    * The header uses a standard Bootstrap `navbar`. It includes the site logo and brand name on the left.
+    * The navigation links on the right are dynamic: they show "Login" and "Sign Up" for logged-out users, and "My Profile" and "Logout" for authenticated users. This is achieved with Django's template logic (`{% if user.is_authenticated %}`).
+
+* **Homepage:**
+    * The layout is built on Bootstrap's **grid system** (`<div class="row">`).
+    * Available bikes are displayed in a series of Bootstrap `card` components. This is a simple and effective way to present items in a list.
+    * On larger screens, the cards appear in a three-column grid. On smaller screens (like mobile), Bootstrap's responsive grid automatically stacks the cards into a single column, ensuring the site is mobile-friendly.
+
+* **Bike Detail Page:**
+    * This page uses a two-column layout. The main bike image is in a larger left-hand column, giving it prominence.
+    * Key information (type, size, price) and the main call-to-action ("Rent Now" button) are in the right-hand column for easy access.
+    * The user reviews and the review submission form are placed below the main content, clearly separating the primary information from secondary user-generated content.
+
+* **Forms (Login/Signup):**
+    * All forms are centered on the page and placed within a `card` to create a clean, focused area for user input.
+    * The forms are rendered using the `django-crispy-forms` package with the `crispy-bootstrap5` template pack. This ensures that all form fields, labels, and error messages are automatically styled according to Bootstrap 5 standards, providing a consistent look and feel.
+
+* **Profile Page:**
+    * This page has a simple, single-column layout.
+    * Clear headings (`<h4>`) are used to separate "Active Rentals" from "Rental History".
+    * Each rental record is displayed in its own `card`, making the information easy to read and scan.
+
 ## Application Screenshots
 
 Below are some screenshots of the application in action.
