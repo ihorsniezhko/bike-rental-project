@@ -2,6 +2,19 @@
 
 This is a Django-based web application for a bike rental service. This project allows users to browse available bikes, rent them, and leave reviews. It also includes user authentication and a profile page for users to manage their rentals. This project was developed by a Code Institute student as a learning exercise.
 
+## Table of Contents
+* [Project Features](#project-features)
+* [Project Management](#project-management)
+* [User Stories](#user-stories)
+* [Wireframes](#wireframes)
+* [Frontend Design and User Experience (UX)](#frontend-design-and-user-experience-ux)
+* [ERD Diagram](#erd-diagram)
+* [Testing](#testing)
+* [Application Loading Speed](#application-loading-speed)
+* [Deployment](#deployment)
+* [Future Features and Improvements](#future-features-and-improvements)
+* [Credits and Resources](#credits-and-resources)
+
 ## Project Features
 
 * **User Authentication**: Users can sign up, log in, and log out. The application uses `django-allauth` for handling authentication.
@@ -70,48 +83,42 @@ The frontend of this project was designed with a focus on simplicity, clarity, a
 * **Overall Structure:**
     * A consistent **Header** and **Footer** are used across all pages, which are defined in the `base.html` template. This ensures a predictable navigation experience for the user.
     * The main content of each page is wrapped in a Bootstrap `container`, which provides appropriate padding and centers the content on larger screens.
+    ![Bike Rental Project Overall Structure](/static/media/overall.png)
 
 * **Header:**
     * The header uses a standard Bootstrap `navbar`. It includes the site logo and brand name on the left.
     * The navigation links on the right are dynamic: they show "Login" and "Sign Up" for logged-out users, and "My Profile" and "Logout" for authenticated users. This is achieved with Django's template logic (`{% if user.is_authenticated %}`).
+    ![Site Header](/static/media/header.png)
 
 * **Homepage:**
     * The layout is built on Bootstrap's **grid system** (`<div class="row">`).
     * Available bikes are displayed in a series of Bootstrap `card` components. This is a simple and effective way to present items in a list.
     * On larger screens, the cards appear in a three-column grid. On smaller screens (like mobile), Bootstrap's responsive grid automatically stacks the cards into a single column, ensuring the site is mobile-friendly.
+    ![Bike Rental Project Homepage](/static/media/homepage.png)
 
 * **Bike Detail Page:**
     * This page uses a two-column layout. The main bike image is in a larger left-hand column, giving it prominence.
     * Key information (type, size, price) and the main call-to-action ("Rent Now" button) are in the right-hand column for easy access.
     * The user reviews and the review submission form are placed below the main content, clearly separating the primary information from secondary user-generated content.
+    ![Bike Detail Page](/static/media/bike-detail.png)
 
 * **Forms (Login/Signup):**
     * All forms are centered on the page and placed within a `card` to create a clean, focused area for user input.
     * The forms are rendered using the `django-crispy-forms` package with the `crispy-bootstrap5` template pack. This ensures that all form fields, labels, and error messages are automatically styled according to Bootstrap 5 standards, providing a consistent look and feel.
+    ![User Sign Up](/static/media/user-signup.png)
+    ![User Login](/static/media/user-login.png)
 
 * **Profile Page:**
     * This page has a simple, single-column layout.
     * Clear headings (`<h4>`) are used to separate "Active Rentals" from "Rental History".
     * Each rental record is displayed in its own `card`, making the information easy to read and scan.
+    ![User Profile](/static/media/user-profile.png)
 
-## Application Screenshots
-
-Below are some screenshots of the application in action.
-
-**Homepage**
-![Bike Rental Project Homepage](/static/media/homepage.png)
-
-**Bike Detail Page**
-![Bike Detail Page](/static/media/bike-detail.png)
-
-**User Sign Up Page**
-![User Sign Up](/static/media/user-signup.png)
-
-**User Profile**
-![User Profile](/static/media/user-profile.png)
-
-**Admin Interface**
-![Admin Interface](/static/media/admin-interface.png)
+* **Django Admin Interface:**
+    * The standard Django admin panel is used for all backend content management.
+    * The interface has been customized to improve usability; for example, the `Review` and `Bike` models use the `django-summernote` widget for their text fields, providing a rich-text editing experience.
+    * This allows the site administrator to easily add new bikes, manage user accounts, and moderate reviews without needing to write code.
+    ![Admin Interface](/static/media/admin-interface.png)
 
 ## ERD Diagram
 
