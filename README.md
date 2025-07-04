@@ -58,6 +58,9 @@ The following user stories were used to guide the development of this project:
 
 The wireframes for this project were created to establish a simple and clear structure for each page, focusing on user flow and element placement.
 
+* Balsamiq Wireframes [BMPR](/static/media/bike-rentals-project.bmpr)
+* Balsamiq Wireframes [PDF](/static/media/bike-rentals-project.pdf)
+
 * **Homepage Wireframe:**
     * **Header:** Contains the logo, site name, and navigation links (Login/Signup or Profile/Logout).
     * **Main Content:** A main heading "Available Bikes" is followed by an introductory paragraph. Below this, a grid of bike cards is displayed. Each card contains a placeholder for an image, the bike's name, key details (type, size, price), and a "View Details" button.
@@ -88,6 +91,7 @@ The frontend of this project was designed with a focus on simplicity, clarity, a
 * **Header:**
     * The header uses a standard Bootstrap `navbar`. It includes the site logo and brand name on the left.
     * The navigation links on the right are dynamic: they show "Login" and "Sign Up" for logged-out users, and "My Profile" and "Logout" for authenticated users. This is achieved with Django's template logic (`{% if user.is_authenticated %}`).
+    * On smaller screens, the navigation links collapse into a hamburger menu to ensure a mobile-friendly experience.
     ![Site Header](/static/media/header.png)
 
 * **Homepage:**
@@ -263,10 +267,12 @@ To ensure a good user experience, the application's loading speed was tested usi
    ```
 
 6. **Run the Application Locally:**
+* Before running the server, ensure that `DEBUG = True` is set in your `settings.py` file. This is crucial for local development as it enables detailed error pages and allows the development server to handle static files automatically.
+* Start the development server:
    ```bash
    python manage.py runserver
    ```
-
+* Remember to set `DEBUG = False` before deploying to a production environment like Heroku.
 ### Heroku Deployment
 
 1.  **Install WhiteNoise:**
