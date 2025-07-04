@@ -1,3 +1,8 @@
-from django.shortcuts import render  # noqa: F401
+from django.shortcuts import render
 
-# Create your views here.
+
+def handler404(request, exception):
+    """
+    Custom view for 404 Not Found errors.
+    """
+    return render(request, '404.html', status=404)
